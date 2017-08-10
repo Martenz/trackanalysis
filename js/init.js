@@ -69,7 +69,7 @@ $(document).ready(function(){
                     //adding track polyline
                     addPoly(latlngs);
 
-                },5000);
+                },6000);
 
 
             };
