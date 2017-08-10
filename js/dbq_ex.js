@@ -4,7 +4,7 @@ var errorElm = document.getElementById('error');
 var savedbElm = document.getElementById('save-db');
 
 // Start the worker in which sql.js will run
-var worker = new Worker("../js/spatiasql.worker.js");
+var worker = new Worker("./js/spatiasql.worker.js");
 worker.onerror = error;
 
 // Open a database
