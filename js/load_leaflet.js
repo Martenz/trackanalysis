@@ -31,7 +31,7 @@ function addTrackPoints(geojsonFeature){
 
 function addmarkers(lablatlon){
   var myIcon = L.icon({
-    iconUrl: '/img/circle.png',
+    iconUrl: './img/circle.png',
     iconSize: [10, 10],
     iconAnchor: [0, 0],
     popupAnchor: [0, 0],
