@@ -98,4 +98,26 @@ function savedb () {
 	tic();
 	worker.postMessage({action:'export'});
 }
-savedbElm.addEventListener("click", savedb, true);
+
+var QRESULT;
+
+savedbElm.addEventListener("click", function(){
+	$('#loading-div').show();
+
+	execQuery('create table mytrack(id integer, pilot text,glider text, date text, time text, lat real, lon real, alt real, baro real);');
+	var ci = 0;
+	points.forEach(function(item,index){
+		execQuery("INSERT into mytrack values('"+toString(ci)+"','"+igc_track['info']['pilot'] + "','" +igc_track['info']['glider']+ "','"
+		+ igc_track['info']['date'] +  "','"
+		+ item['time'] +  "','"
+		+ item['lat'] +  "','" + item['lon'] + "','" + item['alt'] +  "','" + item['altbaro'] + "');");
+		ci+=1;
+	});
+	execQuery("ALTER TABLE mytrack ADD COLUMN the_geom;",false);
+	execQuery("Select AddGeometryColumn('mytrack', 'the_geom', 4326, 'POINT', 'XY', '1')",false );
+	execQuery("UPDATE mytrack SET the_geom=MakePoint(lon, lat, 4326)",false);
+	execQuery("SELECT AsGeoJSON(the_geom), time, alt, baro FROM mytrack;",false);
+
+	setTimeout(function(){savedb();$('#loading-div').hide();},6000);
+
+}, true);

@@ -22,8 +22,8 @@ function read_igc(rows){
     //collecting all points
     if (item.substring(0,1)==="B"){
       btime = new Date( year,month,day, parseInt(item.substring(1,3)),parseInt(item.substring(3,5)),parseInt(item.substring(5,7)) );
-      blat = parseInt(item.substring(7,9))+(parseInt(item.substring(9,11))+parseInt(item.substring(11,14))/1000.0)/60.0; //degrees and ,minutes only (eg 4555321 = 45 degrees 55.321 minutes)
-      blon = parseInt(item.substring(15,18))+(parseInt(item.substring(18,20))+parseInt(item.substring(20,23))/1000.0)/60.0; //degrees and ,minutes only (eg 4555321 = 45 degrees 55.321 minutes)
+      blon = parseInt(item.substring(7,9))+(parseInt(item.substring(9,11))+parseInt(item.substring(11,14))/1000.0)/60.0; //degrees and ,minutes only (eg 4555321 = 45 degrees 55.321 minutes)
+      blat = parseInt(item.substring(15,18))+(parseInt(item.substring(18,20))+parseInt(item.substring(20,23))/1000.0)/60.0; //degrees and ,minutes only (eg 4555321 = 45 degrees 55.321 minutes)
       //check if it is E or W and manage it
       if (item.substring(23,24)==="W"){
         blon = -blon;

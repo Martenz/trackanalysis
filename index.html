@@ -12,6 +12,7 @@
       crossorigin=""></script>
 
 <link rel="stylesheet" href="./css/main.css">
+<link rel="stylesheet" href="./css/leaflet.elevation-0.0.4.css" />
 
 </head>
 
@@ -44,7 +45,7 @@
   </nav>
 
   <div class="container">
-    <div class="well">
+    <div class="well" id="loadigc">
       <h5>Load your IGC file then press Start</h5>
       <form class="form-inline">
         <label class="mr-sm-2" >
@@ -60,6 +61,7 @@
   <div class="row">
     <div class="col-lg-2">
         <!-- Button trigger modal -->
+        <br></br><button id="send-igc" class="btn-sm btn-success btn-xs">Send</button>
         <button type="button" class="btn-sm btn-primary btn-xs" data-toggle="modal" data-target="#exampleModalLong">
           View IGC File
         </button>
@@ -80,9 +82,10 @@
             </div>
           </div>
       </div>
-      <br></br><a href="./"><button class="btn-sm btn-warning btn-xs">Clear</button></a>
       <!--<br></br><button id="store-to-db" class="btn-sm btn-info btn-xs">Save</button>-->
-      <br></br><button id="save-db" class="btn-sm btn-info btn-xs">Export db</button>
+      <br></br><button id="save-db" class="btn-sm btn-info btn-xs">Export as Spatialite db</button>
+      <br></br><a href="./"><button class="btn-sm btn-warning btn-xs">Clear</button></a>
+
 
     </div>
 
@@ -96,6 +99,7 @@
     </div>
     <div class="col-lg-5">
         <div id="mapid"></div>
+        <div id="graph-id"><button class="btn-sm btn-default btn-xs" hidden>Detach Graph</button></div>
     </div>
 
   </div>
@@ -111,6 +115,9 @@
   <!--Leaflet full screen CDN-->
   <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
   <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="./js/leaflet.elevation-0.0.4.min.js" crossorigin="anonymous"></script>
 
   <script src="./js/init.js" crossorigin="anonymous"></script>
   <script src="./js/load_leaflet.js" crossorigin="anonymous"></script>

@@ -1,5 +1,35 @@
 var mymap;
 
+function pointfeature(geometry){
+
+  var pointf = {
+      "type": "Feature",
+      "properties": {
+          "name": "Coors Field",
+          "amenity": "Baseball Stadium",
+          "popupContent": "This is where the Rockies play!"
+      },
+      "geometry": geometry
+    };
+
+  return pointf;
+};
+
+function polygonfeature(geometry){
+  var poly = {"name":"NewFeatureType","type":"FeatureCollection",
+
+    "features":[
+    {"type": "Feature",
+    "properties": null,
+    "geometry": {
+        "type": "LineString",
+        "coordinates": geometry
+    }
+  }]};
+
+  return poly;
+};
+
 function load_map(){
 
   mymap = L.map('mapid').setView([45.911, 8.643], 8);
@@ -31,7 +61,7 @@ function addTrackPoints(geojsonFeature){
 
 function addmarkers(lablatlon){
   var myIcon = L.icon({
-    iconUrl: './img/circle.png',
+    iconUrl: '/img/circle.png',
     iconSize: [10, 10],
     iconAnchor: [0, 0],
     popupAnchor: [0, 0],
@@ -54,8 +84,59 @@ function addmarkers(lablatlon){
 
 function addPoly(latlngs){
 
-  var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
+  //var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
   // zoom the map to the polyline
-  mymap.fitBounds(polyline.getBounds());
+  //mymap.fitBounds(polyline.getBounds());
 
-};
+   //all used options are the default values
+   //..default
+   //var el = L.control.elevation();
+
+    var el = L.control.elevation({
+    	position: "topright",
+  	theme: "steelblue-theme", //default: lime-theme
+  	width: 400,
+  	height: 200,
+  	margins: {
+  		top: 50,
+  		right: 50,
+  		bottom: 50,
+  		left: 70
+  	},
+  	useHeightIndicator: false, //if false a marker is drawn at map position
+  	interpolation: "linear", //see https://github.com/mbostock/d3/wiki/SVG-Shapes#wiki-area_interpolate
+  	hoverNumber: {
+  		decimalsX: 3, //decimals on distance (always in km)
+  		decimalsY: 0, //deciamls on hehttps://www.npmjs.com/package/leaflet.coordinatesight (always in m)
+  		formatter: undefined //custom formatter function may be injected
+  	},
+  	xTicks: undefined, //number of ticks in x axis, calculated by default according to width
+  	yTicks: undefined, //number of ticks on y axis, calculated by default according to height
+  	collapsed: false,  //collapsed mode, show chart on click or mouseover
+  	imperial: false    //display imperial units instead of metric
+  });
+
+  el.addTo(mymap);
+
+  var geojson = polygonfeature(latlngs);
+
+  var polyjson = L.geoJSON(geojson,{
+      onEachFeature: el.addData.bind(el) //working on a better solution
+  }).addTo(mymap);
+
+  //console.log(polyjson.getBounds());
+  var pbounds = polyjson.getBounds();
+  var pwidth = pbounds._northEast.lng - pbounds._southWest.lng;
+  if (pwidth<0.01){ pwidth = 0.01; };
+  //console.log(pwidth);
+  var southWest = L.latLng(pbounds._southWest.lat, pbounds._southWest.lng ),
+      northEast = L.latLng(pbounds._northEast.lat, pbounds._northEast.lng + pwidth*2),
+      bounds = L.latLngBounds(southWest, northEast);
+  mymap.fitBounds(bounds);
+
+  //move the graph outside map
+  $('#graph-id button').on('click',function(){
+    $('div.elevation').detach().appendTo('#dataid');
+  });
+
+  };
