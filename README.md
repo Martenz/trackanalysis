@@ -10,4 +10,4 @@ HTML, CSS, and JS framework:
 </ul>
 
 # Demo:
-<a href="https://martenz.github.io/trackanalysis/">here</a>
+<a href="https://martenz.github.io/trackanalysis/" target="_blank">here</a>
