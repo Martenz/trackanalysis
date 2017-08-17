@@ -1,5 +1,6 @@
-var points;
-var igc_track;
+var points=[];
+var igc_track={};
+
 
 $(document).ready(function(){
     $("#load-igc").click(function(event){
@@ -7,6 +8,7 @@ $(document).ready(function(){
         event.preventDefault();
         $('#loadeddata').removeAttr('hidden');
         $('#loadigc').hide();
+        $("#save-db").hide();
         //get file object
         var file = document.getElementById('myFile').files[0];
         if (file) {
@@ -28,9 +30,16 @@ $(document).ready(function(){
                       //adding track polyline
                       addPoly(latlngs);
                   $('#loading-div').hide();
-                },1000);
+                },500);
             };
-        }
+        };
+
+        setTimeout(function(){
+          var gdb = generate_db();
+        },1000);
+        setTimeout(function(){
+          $("#save-db").show();
+        },6000);
 
     });
 

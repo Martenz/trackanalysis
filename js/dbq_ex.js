@@ -61,10 +61,10 @@ function execute(commands,wres) {
 		toc("Executing SQL");
 
 		tic();
-		outputElm.innerHTML = "";
-		for (var i=0; i<results.length; i++) {
-			outputElm.appendChild(tableCreate(results[i].columns, results[i].values));
-		}
+		//outputElm.innerHTML = "";
+		//for (var i=0; i<results.length; i++) {
+		//	outputElm.appendChild(tableCreate(results[i].columns, results[i].values));
+		//}
 		toc("Displaying results");
 	}
 	worker.postMessage({action:'exec', sql:commands});
@@ -79,45 +79,53 @@ function execQuery (query,wres) {
 }
 //execBtn.addEventListener("click", function(){execQuery(create_table_query);}, true);
 
-// Save the db to a file
-function savedb () {
-	worker.onmessage = function(event) {
-		toc("Exporting the database");
-		var arraybuff = event.data.buffer;
-		var blob = new Blob([arraybuff]);
-		var a = document.createElement("a");
-		a.href = window.URL.createObjectURL(blob);
-		a.download = "mytrack.sqlite";
-		a.onclick = function() {
-			setTimeout(function() {
-				window.URL.revokeObjectURL(a.href);
-			}, 1500);
-		};
-		a.click();
-	};
-	tic();
-	worker.postMessage({action:'export'});
-}
 
 var QRESULT;
+var dbready=false;
 
-savedbElm.addEventListener("click", function(){
-	$('#loading-div').show();
+function generate_db(){
 
-	execQuery('create table mytrack(id integer, pilot text,glider text, date text, time text, lat real, lon real, alt real, baro real);');
+	execQuery('drop table if exists mytrack;',false);
+		//alert('deleted');
+	execQuery('create table mytrack(id integer, pilot text,glider text, date text, time text, lat real, lon real, alt real, baro real);',false);
 	var ci = 0;
 	points.forEach(function(item,index){
 		execQuery("INSERT into mytrack values('"+toString(ci)+"','"+igc_track['info']['pilot'] + "','" +igc_track['info']['glider']+ "','"
 		+ igc_track['info']['date'] +  "','"
 		+ item['time'] +  "','"
-		+ item['lat'] +  "','" + item['lon'] + "','" + item['alt'] +  "','" + item['altbaro'] + "');");
+		+ item['lat'] +  "','" + item['lon'] + "','" + item['alt'] +  "','" + item['altbaro'] + "');",false);
 		ci+=1;
 	});
 	execQuery("ALTER TABLE mytrack ADD COLUMN the_geom;",false);
 	execQuery("Select AddGeometryColumn('mytrack', 'the_geom', 4326, 'POINT', 'XY', '1')",false );
 	execQuery("UPDATE mytrack SET the_geom=MakePoint(lon, lat, 4326)",false);
-	execQuery("SELECT AsGeoJSON(the_geom), time, alt, baro FROM mytrack;",false);
+	/*execQuery("SELECT AsGeoJSON(the_geom), time, alt, baro FROM mytrack;",false);*/
+};
 
-	setTimeout(function(){savedb();$('#loading-div').hide();},6000);
+$("#save-db").click(function (){
+  $('#loading-div').show();
+	setTimeout(function(){
+	// Save the db to a file
+	//function savedb () {
+		worker.onmessage = function(event) {
+			toc("Exporting the database");
+			var arraybuff = event.data.buffer;
+			var blob = new Blob([arraybuff]);
+			var a = document.createElement("a");
+			a.href = window.URL.createObjectURL(blob);
+			a.download = "mytrack.sqlite";
+			a.onclick = function() {
+				setTimeout(function() {
+					window.URL.revokeObjectURL(a.href);
+				}, 1500);
+			};
+			a.click();
+		};
+		tic();
+		worker.postMessage({action:'export'});
+		outputElm.textContent = "Exported, Enjoy :)";
 
-}, true);
+		$('#loading-div').hide();
+	},500);
+	//}
+});
