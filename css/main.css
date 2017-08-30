@@ -1,3 +1,7 @@
+body{
+ background-color: #333644;
+}
+
 #main-logo{
   width:70px;
   height:70px;
@@ -19,4 +23,59 @@
 
 #loading-div img{
   -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(70%, transparent) , to(rgba(250, 250, 250, 0.1)));
+}
+
+#loadeddata{
+	padding: 1rem 1rem;
+    /* margin-bottom: 0px; */
+    /* margin-top: 10px; */
+    margin: 10px;
+}
+
+.leaflet-control.elevation .background {
+	background-color: rgba(255, 255, 255, 0.0)!important;
+	-webkit-border-radius: 2px!important;
+	-moz-border-radius: 2px!important;
+	-ms-border-radius: 2px!important;
+	-o-border-radius: 2px!important;
+	border-radius: 2px!important;
+	//box-shadow: inset 1px 1px 4px 2px #AFBCC6;
+	//border: 1px solid #adadad;
+}
+
+.leaflet-control.elevation .area {
+	opacity: 0.5!important;
+	stroke: black;
+	stroke-width:1px;
+}
+
+.igc-stats{
+ border-left: 1px solid silver;
+}
+
+#igc-options{
+ padding:1rem;
+ background-color: #333644;
+}
+
+.card{
+	background-color: #e8ecd7;
+}
+
+.card-columns {
+    column-count: 1;
+  }
+
+.card-img-top{
+	width:100%;
+}
+
+.border-bottom{
+	border-bottom: 1px solid silver;
+    box-shadow: 0px 5px 8px -3px rgba(0, 0, 0, 0.2);
+	background-image: url('/img/ptr1.jpg');
+}
+
+.modal-dialog {
+    max-width: 800px;
 }

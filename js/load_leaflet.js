@@ -61,7 +61,7 @@ function addTrackPoints(geojsonFeature){
 
 function addmarkers(lablatlon){
   var myIcon = L.icon({
-    iconUrl: '/img/circle.png',
+    iconUrl: '/img/para_icon.png',
     iconSize: [10, 10],
     iconAnchor: [0, 0],
     popupAnchor: [0, 0],
@@ -82,6 +82,13 @@ function addmarkers(lablatlon){
   };
 };
 
+function graphwidth(){
+  $('#dataid').show();
+  var dw = $('#graph-elevation').width();
+  $('#dataid').hide();
+  return dw;
+};
+
 function addPoly(latlngs){
 
   //var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
@@ -92,22 +99,30 @@ function addPoly(latlngs){
    //..default
    //var el = L.control.elevation();
 
+   var myIcon = L.icon({
+     iconUrl: '/img/para_icon.png',
+     iconSize: [10, 10],
+     iconAnchor: [0, 0],
+     popupAnchor: [0, 0],
+   });
+
+
     var el = L.control.elevation({
     	position: "topright",
-  	theme: "steelblue-theme", //default: lime-theme
-  	width: 400,
-  	height: 200,
+  	theme: "lime-theme",//"steelblue-theme", //default: lime-theme
+  	width: graphwidth(),
+  	//height: 200,
   	margins: {
-  		top: 50,
-  		right: 50,
-  		bottom: 50,
+  		top: 15,
+  		right: 70,
+  		bottom: 20,
   		left: 70
   	},
-  	useHeightIndicator: false, //if false a marker is drawn at map position
+  	useHeightIndicator: true, //if false a marker is drawn at map position
   	interpolation: "linear", //see https://github.com/mbostock/d3/wiki/SVG-Shapes#wiki-area_interpolate
   	hoverNumber: {
-  		decimalsX: 3, //decimals on distance (always in km)
-  		decimalsY: 0, //deciamls on hehttps://www.npmjs.com/package/leaflet.coordinatesight (always in m)
+  		decimalsX: 2, //decimals on distance (always in km)
+  		decimalsY: 1, //deciamls on hehttps://www.npmjs.com/package/leaflet.coordinatesight (always in m)
   		formatter: undefined //custom formatter function may be injected
   	},
   	xTicks: undefined, //number of ticks in x axis, calculated by default according to width
@@ -134,9 +149,30 @@ function addPoly(latlngs){
       bounds = L.latLngBounds(southWest, northEast);
   mymap.fitBounds(bounds);
 
-  //move the graph outside map
-  $('#graph-id button').on('click',function(){
-    $('div.elevation').detach().appendTo('#dataid');
+  //change default marker icon
+  L.Marker.prototype.options.icon = new L.icon({
+    iconUrl: '/img/marker-icon.png',
+    iconSize: [60, 60],
+    iconAnchor: [20, 30],
   });
+  //L.Icon.Default.prototype.options.iconSize = (100,100);
+  //L.Icon.Default.imagePath = "/img/";
+
+
+  //move the graph outside map
+  $('div.elevation').detach().appendTo('#dataid #graph-elevation');
+
+  $('a.leaflet-control-fullscreen-button').on('click',function(){
+    if ($(this).attr('title')=="View Fullscreen"){
+      $('div.elevation').detach().appendTo('.leaflet-top.leaflet-right');
+    }else{
+      $('div.elevation').detach().appendTo('#dataid #graph-elevation');
+    };
+  });
+
+
+  //$('#graph-id button').on('click',function(){
+  //  $('div.elevation').detach().appendTo('#dataid');
+  //});
 
   };

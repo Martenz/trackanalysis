@@ -29,7 +29,10 @@ $(document).ready(function(){
                       //console.log(latlngs);
                       //adding track polyline
                       addPoly(latlngs);
+
                   $('#loading-div').hide();
+                  $('#dataid').show();
+                  $('#igc-options').show();
                 },500);
             };
         };
@@ -51,4 +54,6 @@ $(document).ready(function(){
         alert('Sent! Thanks');
       },2000);
     });
+
+
 });

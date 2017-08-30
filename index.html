@@ -23,7 +23,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="container">
-    <h3><img id="main-logo" src="./img/logo.png"> IGC Analysis Tool v.1.03</h3>
+    <h3><img id="main-logo" src="./img/logo.png"> IGC Analysis Tool v.1.04</h3>
   </div>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -45,8 +45,8 @@
   </div>
   </nav>
 
-  <div class="container">
-    <div class="well" id="loadigc">
+  <div class="card-block">
+    <div class="card-block border-bottom" id="loadigc">
       <h5>Load your IGC file then press Start</h5>
       <form class="form-inline">
         <label class="mr-sm-2" >
@@ -60,45 +60,39 @@
 
   <div class="jumbotron" id="loadeddata" hidden>
   <div class="row">
-    <div class="col-lg-2">
-        <!-- Button trigger modal -->
-        <br></br><button id="send-igc" class="btn-sm btn-success btn-xs">Send</button>
-        <button type="button" class="btn-sm btn-primary btn-xs" data-toggle="modal" data-target="#exampleModalLong">
-          View IGC File
-        </button>
-      <!-- Modal -->
-        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">IGC Data</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body" id="igc-raw-data"></div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+
+
+    <div class="col-lg-6">
+       <div id="dataid" style="display:none;">
+        <div class="card-columns">
+
+         <div class="card">
+           <!--<img class="card-img-top img-fluid" src="/img/stats.jpg" alt="Card image cap">-->
+           <div class="card-block border-bottom" style="">
+             <h4 class="card-title">Elevation</h4>
+           </div>
+           <div class="card-block">
+             <div id="graph-elevation"></div>
+           </div>
+         </div>
+           <div class="card">
+            <div class="card-block border-bottom" style="">
+              <h4 class="card-title">Stats</h4>
             </div>
-          </div>
-      </div>
-      <!--<br></br><button id="store-to-db" class="btn-sm btn-info btn-xs">Save</button>-->
-      <br></br><button id="save-db" class="btn-sm btn-info btn-xs">Export as Spatialite db</button>
-      <br></br><a href="./"><button class="btn-sm btn-warning btn-xs">Clear</button></a>
+            <div class="card-block" id="igc-stats">test</div>
+           </div>
 
+         </div>
 
-    </div>
+       </div>
 
-    <div class="col-lg-5">
-       <div id="dataid">
          <div id="loading-div">
            <img id="loading_data" src="./img/loading3.gif">
            <img id="loading_data" src="./img/loading.gif">
          </div>
-       </div>
+
     </div>
-    <div class="col-lg-5">
+    <div class="col-lg-6">
         <div id="mapid"></div>
         <div id="graph-id"><button class="btn-sm btn-default btn-xs" hidden>Detach Graph</button></div>
     </div>
@@ -106,8 +100,37 @@
   </div>
   </div>
 
-  <div id="output"></div>
-  <div id="error"></div>
+
+    <div class="" id="igc-options" style="display:none;">
+      <!-- Button trigger modal -->
+      <button id="send-igc" class="btn-lg btn-success btn-xs">Send</button>
+      <button type="button" class="btn-lg btn-primary btn-xs" data-toggle="modal" data-target="#exampleModalLong">
+        View IGC File
+      </button>
+      <button id="save-db" class="btn-lg btn-info btn-xs">Export as Spatialite db</button>
+      <a href="./"><button class="btn-lg btn-warning btn-xs">Clear</button></a>
+    <!-- Modal -->
+      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">IGC Data</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="igc-raw-data"></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+       </div>
+    <!--<br></br><button id="store-to-db" class="btn-sm btn-info btn-xs">Save</button>-->
+    </div>
+
+  <div id="output" hidden></div>
+  <div id="error" hidden></div>
 
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
@@ -118,7 +141,7 @@
   <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
 
   <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  <script src="./js/leaflet.elevation-0.0.4.min.js" crossorigin="anonymous"></script>
+  <script src="./js/leaflet.elevation-0.0.4.js" crossorigin="anonymous"></script>
 
   <script src="./js/init.js" crossorigin="anonymous"></script>
   <script src="./js/load_leaflet.js" crossorigin="anonymous"></script>
