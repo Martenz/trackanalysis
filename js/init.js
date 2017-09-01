@@ -19,7 +19,7 @@ $(document).ready(function(){
                 var igc = e.target.result;
                 $('#igc-raw-data').html(igc);
                 igc_track = read_igc(igc);
-                load_map();
+
                 setTimeout(function(){
                   points = igc_track['igc_points'];
                       var latlngs = [];
@@ -29,6 +29,7 @@ $(document).ready(function(){
                       //console.log(latlngs);
                       //adding track polyline
                       addPoly(latlngs);
+                      load_map();
 
                   $('#loading-div').hide();
                   $('#dataid').show();

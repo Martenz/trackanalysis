@@ -1,19 +1,8 @@
 var mymap;
-
-function pointfeature(geometry){
-
-  var pointf = {
-      "type": "Feature",
-      "properties": {
-          "name": "Coors Field",
-          "amenity": "Baseball Stadium",
-          "popupContent": "This is where the Rockies play!"
-      },
-      "geometry": geometry
-    };
-
-  return pointf;
-};
+var baseMaps;
+var overlayMaps = {};
+var elevationGraph;
+var bounds;
 
 function polygonfeature(geometry){
   var poly = {"name":"NewFeatureType","type":"FeatureCollection",
@@ -32,55 +21,49 @@ function polygonfeature(geometry){
 
 function load_map(){
 
-  mymap = L.map('mapid').setView([45.911, 8.643], 8);
+  var basem1 = L.tileLayer('https://api.mapbox.com/styles/v1/mboni/cis8tl34400112zo3dl6bc0ku/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWJvbmkiLCJhIjoiY2lzOHNzcWJtMDA0ODJ6czQ2eXQxOXNqeCJ9.geDRSQxeQQQkKDN9bZWeuw');
+  var OpenTopoMap = L.tileLayer('http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+  });
+  var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
 
-//   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-//     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-//     maxZoom: 18,
-//     id: 'mapbox.streets',
-//     accessToken: 'your.mapbox.access.token'
-// }).addTo(mymap);
-
-  L.tileLayer('https://api.mapbox.com/styles/v1/mboni/cis8tl34400112zo3dl6bc0ku/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWJvbmkiLCJhIjoiY2lzOHNzcWJtMDA0ODJ6czQ2eXQxOXNqeCJ9.geDRSQxeQQQkKDN9bZWeuw'
-  ).addTo(mymap);
-
-  mymap.addControl(new L.Control.Fullscreen());
-
-};
-
-var myStyle = {
-    "color": "#ff7800",
-    "weight": 5,
-    "opacity": 0.65
-};
-
-function addTrackPoints(geojsonFeature){
-  L.geoJSON(geojsonFeature).addTo(mymap);
-  console.log("added");
-};
-
-function addmarkers(lablatlon){
-  var myIcon = L.icon({
-    iconUrl: '/img/para_icon.png',
-    iconSize: [10, 10],
-    iconAnchor: [0, 0],
-    popupAnchor: [0, 0],
+  mymap = L.map('mapid', {
+    center: [45.911, 8.643],
+    zoom: 8,
+    layers: [basem1]
   });
 
-  for (var i = 0; i < lablatlon.length; i++) {
-    marker = new L.marker([lablatlon[i][1],lablatlon[i][2]],{icon:myIcon})
-      .bindPopup(lablatlon[i][0])
-      .addTo(mymap);
-
-      marker.on('mouseover', function (e) {
-              this.openPopup();
-          });
-          marker.on('mouseout', function (e) {
-              this.closePopup();
-          });
-
+  baseMaps = {
+    "<img src='./img/basemap1.png' width=20px /> MapBoxTenz": basem1,
+    "<img src='./img/basemap2.png' width=20px /> OpenTopoMap": OpenTopoMap,
+    "<img src='./img/basemap3.png' width=20px /> Esri World Imagery": Esri_WorldImagery,
   };
+
+  elevationGraph.addTo(mymap);
+  L.control.layers(baseMaps,overlayMaps).addTo(mymap);
+  for(var key in overlayMaps){
+    overlayMaps[key].addTo(mymap);
+  };
+  mymap.addControl(new L.Control.Fullscreen());
+  mymap.fitBounds(bounds);
+
+  //move the graph outside map
+  $('div.elevation').detach().appendTo('#dataid #graph-elevation');
+
+  $('a.leaflet-control-fullscreen-button').on('click',function(){
+    if ($(this).attr('title')=="View Fullscreen"){
+      $('div.elevation').detach().appendTo('.leaflet-top.leaflet-right');
+    }else{
+      $('div.elevation').detach().appendTo('#dataid #graph-elevation');
+    };
+  });
+
 };
+
+
 
 function graphwidth(){
   $('#dataid').show();
@@ -131,13 +114,16 @@ function addPoly(latlngs){
   	imperial: false    //display imperial units instead of metric
   });
 
-  el.addTo(mymap);
+  //el.addTo(mymap);
+  elevationGraph = el;
 
   var geojson = polygonfeature(latlngs);
 
   var polyjson = L.geoJSON(geojson,{
       onEachFeature: el.addData.bind(el) //working on a better solution
-  }).addTo(mymap);
+  });//.addTo(mymap);
+
+  overlayMaps["<img src='./img/logo.png' width=20px /> Your Track"] = polyjson
 
   //console.log(polyjson.getBounds());
   var pbounds = polyjson.getBounds();
@@ -145,9 +131,9 @@ function addPoly(latlngs){
   if (pwidth<0.01){ pwidth = 0.01; };
   //console.log(pwidth);
   var southWest = L.latLng(pbounds._southWest.lat, pbounds._southWest.lng ),
-      northEast = L.latLng(pbounds._northEast.lat, pbounds._northEast.lng + pwidth*2),
-      bounds = L.latLngBounds(southWest, northEast);
-  mymap.fitBounds(bounds);
+      northEast = L.latLng(pbounds._northEast.lat, pbounds._northEast.lng + pwidth*2)
+  bounds = L.latLngBounds(southWest, northEast);
+
 
   //change default marker icon
   L.Marker.prototype.options.icon = new L.icon({
@@ -157,22 +143,5 @@ function addPoly(latlngs){
   });
   //L.Icon.Default.prototype.options.iconSize = (100,100);
   //L.Icon.Default.imagePath = "/img/";
-
-
-  //move the graph outside map
-  $('div.elevation').detach().appendTo('#dataid #graph-elevation');
-
-  $('a.leaflet-control-fullscreen-button').on('click',function(){
-    if ($(this).attr('title')=="View Fullscreen"){
-      $('div.elevation').detach().appendTo('.leaflet-top.leaflet-right');
-    }else{
-      $('div.elevation').detach().appendTo('#dataid #graph-elevation');
-    };
-  });
-
-
-  //$('#graph-id button').on('click',function(){
-  //  $('div.elevation').detach().appendTo('#dataid');
-  //});
 
   };
