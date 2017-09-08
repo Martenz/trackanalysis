@@ -111,15 +111,17 @@ $("#save-db").click(function (){
 			toc("Exporting the database");
 			var arraybuff = event.data.buffer;
 			var blob = new Blob([arraybuff]);
-			var a = document.createElement("a");
-			a.href = window.URL.createObjectURL(blob);
-			a.download = "mytrack.sqlite";
-			a.onclick = function() {
-				setTimeout(function() {
-					window.URL.revokeObjectURL(a.href);
-				}, 1500);
-			};
-			a.click();
+			var link = document.createElement("a");
+			document.body.appendChild(link);
+			link.setAttribute("type", "hidden");
+			link.href = window.URL.createObjectURL(blob);
+			link.download = "mytrack.sqlite";
+			//link.onclick = function() {
+			//	setTimeout(function() {
+			//		window.URL.revokeObjectURL(link.href);
+			//	}, 1500);
+			//};
+			link.click();
 		};
 		tic();
 		worker.postMessage({action:'export'});
