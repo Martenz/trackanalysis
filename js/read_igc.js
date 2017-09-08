@@ -7,6 +7,11 @@ function read_igc(rows){
   var year,month,day;
   var igc_track = {'info':{}}
 
+  var maxBaro=-99;
+  var maxGps=-99;
+  var minBaro=9999;
+  var minGps=9999;
+
   igc_rows.forEach(function(item,index){
 
     //collecting the date
@@ -16,7 +21,7 @@ function read_igc(rows){
       month = parseInt(item.substring(7,9))-1;
       year = parseInt(item.substring(9,11))+2000;
       bdate = new Date(year,month,day);
-      igc_track['info']['date'] = bdate;
+      igc_track['info']['date'] = bdate.toLocaleDateString('en-ITA');
     };
 
     //collecting all points
@@ -32,8 +37,16 @@ function read_igc(rows){
       bbaro = "";
       if (item.indexOf('A')>=0){
         balt = parseInt(item.substring(25,30));
+        if(balt>maxGps){maxGps = balt};
+        if(balt<minGps){minGps = balt};
+        if (maxGps>0){igc_track['info']['Max Elevation (GPS)']=maxGps.toString();};
+        if (minGps<9999){igc_track['info']['Min Elevation (GPS)']=minGps.toString();};
         if (item.length > 31){
           bbaro = parseInt(item.substring(30,35));
+          if(balt>maxBaro){maxBaro = bbaro};
+          if(balt<minBaro){minBaro = bbaro};
+          if (maxBaro>0){igc_track['info']['Max Elevation (Barometric)']=maxBaro.toString();};
+          if (minBaro>0){igc_track['info']['Min Elevation (Barometric)']=minBaro.toString();};
         };
       };
       igc_points.push({'time':btime,'lat':blat,'lon':blon,'alt':balt,'altbaro':bbaro});

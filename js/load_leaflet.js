@@ -49,6 +49,7 @@ function load_map(){
   };
   mymap.addControl(new L.Control.Fullscreen());
   mymap.fitBounds(bounds);
+  mymap._onResize(); 
 
   //move the graph outside map
   $('div.elevation').detach().appendTo('#dataid #graph-elevation');
@@ -102,7 +103,8 @@ function addPoly(latlngs){
   		left: 70
   	},
   	useHeightIndicator: true, //if false a marker is drawn at map position
-  	interpolation: "linear", //see https://github.com/mbostock/d3/wiki/SVG-Shapes#wiki-area_interpolate
+    // interpolation: 'linear','step-before','step-after','basis','basis-open','basis-closed','bundle','cardinal','cardinal-open','cardinal-closed','monotone'
+    interpolation: "monotone", //see https://github.com/mbostock/d3/wiki/SVG-Shapes#wiki-area_interpolate
   	hoverNumber: {
   		decimalsX: 2, //decimals on distance (always in km)
   		decimalsY: 1, //deciamls on hehttps://www.npmjs.com/package/leaflet.coordinatesight (always in m)

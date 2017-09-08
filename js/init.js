@@ -24,16 +24,18 @@ $(document).ready(function(){
                   points = igc_track['igc_points'];
                       var latlngs = [];
                       points.forEach(function(val,index){
-                        latlngs.push( [val.lat,val.lon,val.alt,val.altbaro] );
+                        latlngs.push( [val.lat,val.lon,val.altbaro,val.alt] );
                       });
                       //console.log(latlngs);
                       //adding track polyline
                       addPoly(latlngs);
                       load_map();
+                      trackStat(igc_track);
 
                   $('#loading-div').hide();
                   $('#dataid').show();
                   $('#igc-options').show();
+                
                 },500);
             };
         };
