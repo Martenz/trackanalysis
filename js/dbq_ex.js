@@ -96,12 +96,10 @@ function generate_db(){
 		+ item['lat'] +  "','" + item['lon'] + "','" + item['alt'] +  "','" + item['altbaro'] + "');",false);
 		ci+=1;
 	});
-	execQuery("ALTER TABLE mytrack ADD COLUMN the_geom;",false);
-	execQuery("Select AddGeometryColumn('mytrack', 'the_geom', 4326, 'POINT', 'XY', '1')",false );
-	execQuery("UPDATE mytrack SET the_geom=MakePoint(lon, lat, 4326)",false);
-	setTimeout(function(){
-		execQuery("SELECT RecoverGeometryColumn('mytrack', 'the_geom',4326, 'POINT', 'XY');",false);
-	},500);
+	execQuery("ALTER TABLE mytrack ADD COLUMN geometry_columns;",false);
+	execQuery("Select AddGeometryColumn('mytrack', 'Geometry', 4326, 'POINT', 2);",false );
+	execQuery("UPDATE mytrack SET Geometry=MakePoint(lon, lat, 4326);",false);
+	execQuery("SELECT RecoverGeometryColumn('mytrack', 'Geometry',4326, 'POINT', 'XY');",false);
 	/*execQuery("SELECT AsGeoJSON(the_geom), time, alt, baro FROM mytrack;",false);*/
 };
 
