@@ -96,7 +96,7 @@ function generate_db(){
 		+ item['lat'] +  "','" + item['lon'] + "','" + item['alt'] +  "','" + item['altbaro'] + "');",false);
 		ci+=1;
 	});
-	execQuery("ALTER TABLE mytrack ADD COLUMN geometry_columns;",false);
+	execQuery("ALTER TABLE mytrack ADD COLUMN Geometry;",false);
 	execQuery("Select AddGeometryColumn('mytrack', 'Geometry', 4326, 'POINT', 2);",false );
 	execQuery("UPDATE mytrack SET Geometry=MakePoint(lon, lat, 4326);",false);
 	execQuery("SELECT RecoverGeometryColumn('mytrack', 'Geometry',4326, 'POINT', 'XY');",false);
