@@ -42,7 +42,7 @@ $(document).ready(function(){
 
         setTimeout(function(){
           var gdb = generate_db();
-        },2000);
+        },1000);
         setTimeout(function(){
           $("#save-db").show();
         },6000);
