@@ -11,7 +11,7 @@ function polygonfeature(geometry){
     {"type": "Feature",
     "properties": null,
     "geometry": {
-        "type": "LineString",
+        "type": "Point",
         "coordinates": geometry
     }
   }]};
