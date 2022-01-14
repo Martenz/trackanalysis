@@ -128,13 +128,13 @@ function addPoly(latlngs){
   overlayMaps["<img src='./img/logo.png' width=20px /> Your Track"] = polyjson
 
   //console.log(polyjson.getBounds());
-  var pbounds = polyjson.getBounds();
-  var pwidth = pbounds._northEast.lng - pbounds._southWest.lng;
-  if (pwidth<0.01){ pwidth = 0.01; };
+  //var pbounds = polyjson.getBounds();
+  //var pwidth = pbounds._northEast.lng - pbounds._southWest.lng;
+  //if (pwidth<0.01){ pwidth = 0.01; };
   //console.log(pwidth);
-  var southWest = L.latLng(pbounds._southWest.lat, pbounds._southWest.lng ),
-      northEast = L.latLng(pbounds._northEast.lat, pbounds._northEast.lng + pwidth*2)
-  bounds = L.latLngBounds(southWest, northEast);
+  //var southWest = L.latLng(pbounds._southWest.lat, pbounds._southWest.lng ),
+  //    northEast = L.latLng(pbounds._northEast.lat, pbounds._northEast.lng + pwidth*2)
+  //bounds = L.latLngBounds(southWest, northEast);
 
 
   //change default marker icon
